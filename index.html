@@ -1,14 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script>
+/* TOKEN INTERCEPTOR - must run before anything else.
+   Netlify sends invite/reset links to homepage with token in the URL hash.
+   This catches it instantly and redirects to set-password.html */
+(function() {
+  var h = window.location.hash;
+  if (h && (h.indexOf('invite_token=') !== -1 || h.indexOf('recovery_token=') !== -1 || h.indexOf('confirmation_token=') !== -1)) {
+    window.location.replace('/set-password.html' + h);
+  }
+})();
+</script>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Shrisha Garments — Premium T-Shirts</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Josefin+Sans:wght@100;200;300;400&display=swap" rel="stylesheet"/>
 <!-- js-yaml for parsing product .md files -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
-<!-- Netlify Identity Widget — handles invite/password-reset tokens -->
-<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 
 <style>
 :root{
@@ -425,234 +434,6 @@ async function loadSettings() {
   }
 }
 
-/* ── SVG T-shirt illustration per card ── */
-function tshirtSVG(product) {
-  const bg = product.bgColor || '#1A1A1A';
-  const isDark = ['#1A1A1A','#111009','#1B2A4A','#2D4A3E'].includes(bg);
-  const textCol = isDark ? '#E8D08A' : '#1A1A1A';
-  const lineCol = isDark ? 'rgba(201,168,76,' : 'rgba(26,26,26,';
-
-  if (product.featured) {
-    return `<svg viewBox="0 0 300 450" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect width="300" height="450" fill="${bg}"/>
-      <!-- Oversized tee silhouette -->
-      <path d="M70 90 L20 155 L70 172 L70 390 L230 390 L230 172 L280 155 L230 90 Q210 68 185 72 Q170 45 150 45 Q130 45 115 72 Q90 68 70 90Z" fill="${isDark?'rgba(255,255,255,.07)':'rgba(0,0,0,.07)'}"/>
-      <path d="M75 92 L25 155 L72 170 L72 388 L228 388 L228 170 L275 155 L225 92 Q206 71 183 74 Q169 47 150 47 Q131 47 117 74 Q94 71 75 92Z" fill="${isDark?'rgba(255,255,255,.04)':'rgba(0,0,0,.04)'}"/>
-      <!-- Collar -->
-      <path d="M115 72 Q133 92 150 92 Q167 92 185 72 Q169 47 150 47 Q131 47 115 72Z" fill="${isDark?'rgba(0,0,0,.4)':'rgba(0,0,0,.08)'}"/>
-      <!-- Gold center graphic -->
-      <circle cx="150" cy="240" r="55" fill="none" stroke="${textCol}" stroke-width="1" opacity=".5"/>
-      <circle cx="150" cy="240" r="38" fill="none" stroke="${textCol}" stroke-width=".6" opacity=".3"/>
-      <text x="150" y="237" text-anchor="middle" font-family="Josefin Sans" font-size="8" fill="${textCol}" opacity=".9" letter-spacing="4">SHRISHA</text>
-      <text x="150" y="250" text-anchor="middle" font-family="Josefin Sans" font-size="6" fill="${textCol}" opacity=".5" letter-spacing="3">GARMENTS</text>
-      <!-- Hem -->
-      <line x1="72" y1="382" x2="228" y2="382" stroke="${textCol}" stroke-width="1" opacity=".2"/>
-      <!-- Label -->
-      <text x="150" y="430" text-anchor="middle" font-family="Josefin Sans" font-size="10" fill="${textCol}" opacity=".35" letter-spacing="5">${(product.category||'').toUpperCase().slice(0,12)}</text>
-    </svg>`;
-  }
-
-  const v = (product.name||'').charCodeAt(0) % 3;
-  const shapes = [
-    /* v0 — classic tee with circle print */
-    `<path d="M45 55 L12 95 L45 107 L45 240 L155 240 L155 107 L188 95 L155 55 Q142 38 125 41 Q116 25 100 25 Q84 25 75 41 Q58 38 45 55Z" fill="${isDark?'rgba(255,255,255,.06)':'rgba(0,0,0,.06)'}"/>
-     <path d="M115 41 Q128 56 100 56 Q72 56 85 41 Q84 25 100 25 Q116 25 115 41Z" fill="${isDark?'rgba(0,0,0,.35)':'rgba(0,0,0,.06)'}"/>
-     <circle cx="100" cy="155" r="32" fill="none" stroke="${textCol}" stroke-width=".8" opacity=".5"/>
-     <text x="100" y="159" text-anchor="middle" font-family="Josefin Sans" font-size="7" fill="${textCol}" opacity=".8" letter-spacing="2">SHRISHA</text>
-     <line x1="45" y1="235" x2="155" y2="235" stroke="${textCol}" stroke-width=".8" opacity=".2"/>`,
-    /* v1 — polo-style with button placket */
-    `<path d="M45 55 L12 95 L45 107 L45 240 L155 240 L155 107 L188 95 L155 55 Q142 38 125 41 Q116 25 100 25 Q84 25 75 41 Q58 38 45 55Z" fill="${isDark?'rgba(255,255,255,.06)':'rgba(0,0,0,.06)'}"/>
-     <path d="M85 41 Q95 38 100 35 Q105 38 115 41 Q110 52 100 55 Q90 52 85 41Z" fill="${isDark?'rgba(0,0,0,.3)':'rgba(0,0,0,.08)'}"/>
-     <line x1="100" y1="55" x2="100" y2="110" stroke="${textCol}" stroke-width="1" opacity=".35"/>
-     <circle cx="100" cy="70" r="3" fill="${textCol}" opacity=".4"/>
-     <circle cx="100" cy="85" r="3" fill="${textCol}" opacity=".4"/>
-     <circle cx="100" cy="100" r="3" fill="${textCol}" opacity=".4"/>
-     <line x1="45" y1="107" x2="155" y2="107" stroke="${textCol}" stroke-width=".6" opacity=".2"/>
-     <line x1="45" y1="235" x2="155" y2="235" stroke="${textCol}" stroke-width=".8" opacity=".2"/>`,
-    /* v2 — graphic tee with abstract stripes */
-    `<path d="M45 55 L12 95 L45 107 L45 240 L155 240 L155 107 L188 95 L155 55 Q142 38 125 41 Q116 25 100 25 Q84 25 75 41 Q58 38 45 55Z" fill="${isDark?'rgba(255,255,255,.06)':'rgba(0,0,0,.06)'}"/>
-     <path d="M85 41 Q100 58 115 41 Q100 25 85 41Z" fill="${isDark?'rgba(0,0,0,.3)':'rgba(0,0,0,.08)'}"/>
-     <rect x="62" y="125" width="76" height="6" rx="3" fill="${textCol}" opacity=".2"/>
-     <rect x="70" y="138" width="60" height="4" rx="2" fill="${textCol}" opacity=".15"/>
-     <rect x="78" y="149" width="44" height="4" rx="2" fill="${textCol}" opacity=".1"/>
-     <text x="100" y="200" text-anchor="middle" font-family="Cormorant Garamond" font-size="13" fill="${textCol}" opacity=".5" font-style="italic">Shrisha</text>
-     <line x1="45" y1="235" x2="155" y2="235" stroke="${textCol}" stroke-width=".8" opacity=".2"/>`
-  ][v];
-
-  return `<svg viewBox="0 0 200 265" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect width="200" height="265" fill="${bg}"/>${shapes}
-    <text x="100" y="258" text-anchor="middle" font-family="Josefin Sans" font-size="7" fill="${textCol}" opacity=".3" letter-spacing="3">${(product.category||'').toUpperCase().slice(0,10)}</text>
-  </svg>`;
-}
-
-/* ── Badge color mapping ── */
-function badgeClass(badge) {
-  if (!badge) return '';
-  const map = { 'Sale':'badge-rose', 'Limited':'badge-rose', 'Bestseller':'badge-gold', 'Trending':'badge-gold' };
-  return map[badge] || 'badge-dark';
-}
-
-/* ── Render all products ── */
-let allProducts = [];
-let activeFilter = 'all';
-
-function renderProducts(products) {
-  const grid = document.getElementById('collections-grid');
-  document.getElementById('loading').style.display = 'none';
-  grid.style.display = 'grid';
-  grid.innerHTML = '';
-
-  const featured = products.filter(p => p.featured);
-  const normal   = products.filter(p => !p.featured);
-  const total    = products.length;
-  grid.style.gridTemplateColumns = featured.length && total >= 3 ? '1.4fr 1fr 1fr'
-    : total === 2 ? '1fr 1fr' : total === 1 ? '1fr' : 'repeat(3,1fr)';
-
-  [...featured, ...normal].forEach(p => {
-    const badgeCls = badgeClass(p.badge);
-    const badgeHTML = p.badge ? `<div class="card-badge ${badgeCls}">${p.badge}</div>` : '';
-    const oosHTML   = !p.inStock ? `<div class="card-oos">Out of Stock</div>` : '';
-    const discount  = p.originalPrice > 0 ? Math.round((1 - p.price/p.originalPrice)*100) : 0;
-    const priceHTML = p.originalPrice > 0
-      ? `<span class="card-price">₹${p.price.toLocaleString()}</span>
-         <span class="card-original">₹${p.originalPrice.toLocaleString()}</span>
-         <span class="card-discount">${discount}% off</span>`
-      : `<span class="card-price">₹${p.price.toLocaleString()}</span>`;
-    const sizesHTML = (p.sizes||[]).slice(0,5).map(s=>`<span class="size-chip">${s}</span>`).join('');
-
-    const el = document.createElement('div');
-    el.className = 'card reveal' + (p.featured ? ' featured' : '');
-    el.dataset.category = p.category || '';
-    el.innerHTML = `
-      <div class="card-img"><div class="card-img-inner">${tshirtSVG(p)}</div></div>
-      ${badgeHTML}${oosHTML}
-      <div class="card-info">
-        <div class="card-name">${p.name}</div>
-        <div class="card-cat">${p.category}</div>
-        <div class="card-price-row">${priceHTML}</div>
-        <div class="card-sizes">${sizesHTML}</div>
-      </div>`;
-    grid.appendChild(el);
-  });
-
-  // Re-observe for scroll reveal
-  setTimeout(() => {
-    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
-    attachCursorListeners();
-  }, 60);
-}
-
-/* ── Filter logic ── */
-function applyFilter(category) {
-  activeFilter = category;
-  const cards = document.querySelectorAll('.card');
-  let visible = 0;
-  cards.forEach(c => {
-    const match = category === 'all' || c.dataset.category === category;
-    c.style.display = match ? '' : 'none';
-    if (match) visible++;
-  });
-  document.getElementById('product-count').textContent = `${visible} style${visible !== 1 ? 's' : ''}`;
-}
-
-/* ── Build filter buttons ── */
-function buildFilters(products) {
-  const cats = [...new Set(products.map(p => p.category).filter(Boolean))];
-  const bar = document.getElementById('filter-bar');
-  cats.forEach(cat => {
-    const btn = document.createElement('button');
-    btn.className = 'filter-btn';
-    btn.dataset.filter = cat;
-    btn.textContent = cat;
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      applyFilter(cat);
-    });
-    bar.appendChild(btn);
-  });
-  document.querySelector('.filter-btn[data-filter="all"]').addEventListener('click', () => {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    document.querySelector('.filter-btn[data-filter="all"]').classList.add('active');
-    applyFilter('all');
-  });
-}
-
-/* ── Build footer category links ── */
-function buildFooterCats(products) {
-  const cats = [...new Set(products.map(p => p.category).filter(Boolean))];
-  document.getElementById('footer-cats').innerHTML =
-    cats.map(c => `<li><a href="#">${c}</a></li>`).join('');
-}
-
-/* ── Populate settings ── */
-function applySettings(s) {
-  document.getElementById('hero-sub').textContent   = s.heroSub    || '';
-  document.getElementById('about-num').textContent  = s.yearsExp   || '15+';
-  document.getElementById('stat-exp').innerHTML     = (s.yearsExp  ||'15+').replace('+','<sup>+</sup>');
-  document.getElementById('stat-cust').innerHTML    = (s.customers ||'40K+').replace('+','<sup>+</sup>');
-  document.getElementById('stat-des').innerHTML     = (s.designs   ||'200+').replace('+','<sup>+</sup>');
-  document.getElementById('footer-tagline').textContent = s.tagline || '';
-  document.getElementById('footer-email').textContent   = s.email   || '';
-  document.getElementById('footer-phone').textContent   = s.phone   || '';
-
-  // Announcement marquee — duplicate for seamless scroll
-  const msg = s.announcement || 'Free Shipping above ₹999 ✦ New Drops Every Week';
-  const doubled = [msg, msg].map(m => m.split('✦').map(t => `<span>${t.trim()}</span><span class="dot">✦</span>`).join('')).join('');
-  document.getElementById('announce-track').innerHTML = doubled;
-}
-
-/* ── Scroll reveal observer ── */
-const obs = new IntersectionObserver((entries) => {
-  entries.forEach((entry, i) => {
-    if (entry.isIntersecting) {
-      setTimeout(() => entry.target.classList.add('visible'), 80*(i%4));
-      obs.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.1 });
-document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
-
-/* ── Custom cursor ── */
-const cur = document.getElementById('cursor');
-document.addEventListener('mousemove', e => { cur.style.left=e.clientX+'px'; cur.style.top=e.clientY+'px'; });
-function attachCursorListeners() {
-  document.querySelectorAll('a,button,.card').forEach(el => {
-    el.addEventListener('mouseenter', () => cur.classList.add('big'));
-    el.addEventListener('mouseleave', () => cur.classList.remove('big'));
-  });
-}
-attachCursorListeners();
-
-/* ── INIT ── */
-(async () => {
-  const [settings, products] = await Promise.all([loadSettings(), loadProducts()]);
-  applySettings(settings);
-  allProducts = products;
-  renderProducts(products);
-  buildFilters(products);
-  buildFooterCats(products);
-  document.getElementById('product-count').textContent =
-    `${products.length} style${products.length !== 1 ? 's' : ''}`;
-})();
-
-/* ── Netlify Identity — redirect to admin after login ── */
-if (window.netlifyIdentity) {
-  window.netlifyIdentity.on('init', user => {
-    if (!user) {
-      window.netlifyIdentity.on('login', () => {
-        document.location.href = '/admin/';
-      });
-    }
-  });
-  /* Auto-open the widget if an invite/recovery token is in the URL */
-  if (window.location.hash && (
-    window.location.hash.includes('invite_token') ||
-    window.location.hash.includes('recovery_token') ||
-    window.location.hash.includes('confirmation_token')
-  )) {
-    window.netlifyIdentity.open();
-  }
 }
 </script>
 </body>
