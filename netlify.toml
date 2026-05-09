@@ -16,3 +16,14 @@
   from = "/admin"
   to = "/admin/index.html"
   status = 200
+
+# Redirect Netlify invite & recovery token links to dedicated password page
+[[redirects]]
+  from = "/#invite_token=*"
+  to = "/set-password.html#invite_token=:splat"
+  status = 301
+
+[[redirects]]
+  from = "/#recovery_token=*"
+  to = "/set-password.html#recovery_token=:splat"
+  status = 301
