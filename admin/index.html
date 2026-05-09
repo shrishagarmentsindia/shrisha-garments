@@ -1,15 +1,168 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Shrisha Garments — Admin Panel</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Shrisha Garments — Admin</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👗</text></svg>"/>
-  <!-- Netlify Identity Widget MUST load before CMS -->
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@200;300;400&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap" rel="stylesheet"/>
+
+  <!-- STEP 1: Identity widget MUST load first, before anything else -->
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{background:#111009;font-family:'Josefin Sans',sans-serif;}
+
+    /* Gate: covers entire page until auth is verified */
+    #auth-gate{
+      position:fixed;inset:0;z-index:99999;
+      background:#111009;
+      display:flex;align-items:center;justify-content:center;
+      flex-direction:column;gap:0;
+    }
+    #auth-gate.hidden{display:none;}
+
+    .gate-box{
+      text-align:center;padding:60px 48px;max-width:420px;width:90%;
+      border:1px solid rgba(201,168,76,.2);
+      background:rgba(255,255,255,.02);
+    }
+    .gate-logo{
+      font-family:'Cormorant Garamond',serif;
+      font-size:2rem;font-weight:300;letter-spacing:.15em;
+      color:#FAF7F2;margin-bottom:6px;
+    }
+    .gate-logo span{color:#C9A84C;}
+    .gate-sub{font-size:.58rem;letter-spacing:.3em;text-transform:uppercase;color:#C9A84C;margin-bottom:40px;}
+    .gate-title{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:300;color:#FAF7F2;margin-bottom:12px;}
+    .gate-title em{font-style:italic;color:#E8D08A;}
+    .gate-text{font-size:.68rem;color:#7A7060;line-height:2;letter-spacing:.06em;margin-bottom:32px;}
+
+    .spinner{width:28px;height:28px;border:2px solid rgba(201,168,76,.15);border-top-color:#C9A84C;border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 24px;}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    .btn-login{
+      background:#C9A84C;color:#111009;border:none;
+      padding:14px 40px;cursor:pointer;
+      font-family:'Josefin Sans',sans-serif;
+      font-size:.65rem;letter-spacing:.25em;text-transform:uppercase;
+      transition:background .3s;width:100%;
+    }
+    .btn-login:hover{background:#E8D08A;}
+
+    .access-denied{color:#e07070;font-size:.65rem;letter-spacing:.1em;margin-top:16px;display:none;}
+
+    /* Hide CMS until auth passes */
+    #cms-wrapper{display:none;}
+  </style>
 </head>
 <body>
-  <!-- Decap CMS (formerly Netlify CMS) -->
-  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+
+<!-- ── AUTH GATE — shown until login verified ── -->
+<div id="auth-gate">
+  <div class="gate-box">
+    <div class="gate-logo">Shrisha<span>.</span></div>
+    <div class="gate-sub">Admin Panel</div>
+
+    <!-- Checking state -->
+    <div id="gate-checking">
+      <div class="spinner"></div>
+      <div class="gate-title">Verifying <em>Access</em></div>
+      <div class="gate-text">Please wait while we verify your identity…</div>
+    </div>
+
+    <!-- Login state -->
+    <div id="gate-login" style="display:none;">
+      <div class="gate-title">Admin <em>Login</em></div>
+      <div class="gate-text">You must be logged in with an authorised account to access the admin panel.</div>
+      <button class="btn-login" id="btn-open-login">Login to Admin Panel</button>
+      <div class="access-denied" id="access-denied">Access denied. Only invited admins can log in.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── CMS loads here — only shown after auth ── -->
+<div id="cms-wrapper"></div>
+
+<!-- STEP 2: Load Decap CMS AFTER identity widget -->
+<script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+
+<script>
+(function() {
+  'use strict';
+
+  const gate       = document.getElementById('auth-gate');
+  const checking   = document.getElementById('gate-checking');
+  const loginBox   = document.getElementById('gate-login');
+  const loginBtn   = document.getElementById('btn-open-login');
+  const accessMsg  = document.getElementById('access-denied');
+  const cmsWrapper = document.getElementById('cms-wrapper');
+
+  function showLoginForm() {
+    checking.style.display = 'none';
+    loginBox.style.display = 'block';
+  }
+
+  function grantAccess() {
+    // Hide gate, show CMS
+    gate.classList.add('hidden');
+    cmsWrapper.style.display = 'block';
+  }
+
+  function denyAccess(msg) {
+    showLoginForm();
+    accessMsg.textContent = msg || 'Access denied. Only invited admins can log in.';
+    accessMsg.style.display = 'block';
+    // Force logout
+    try { window.netlifyIdentity.logout(); } catch(e) {}
+  }
+
+  // Open login popup on button click
+  loginBtn.addEventListener('click', () => {
+    accessMsg.style.display = 'none';
+    window.netlifyIdentity.open('login');
+  });
+
+  // Identity events
+  window.netlifyIdentity.on('init', function(user) {
+    if (user) {
+      // User already logged in — verify they are a real Netlify Identity user
+      if (user.email && user.id) {
+        grantAccess();
+      } else {
+        denyAccess();
+      }
+    } else {
+      // No session — show login
+      showLoginForm();
+    }
+  });
+
+  window.netlifyIdentity.on('login', function(user) {
+    window.netlifyIdentity.close();
+    if (user && user.email && user.id) {
+      grantAccess();
+    } else {
+      denyAccess('Unrecognised account. Contact the site owner.');
+    }
+  });
+
+  window.netlifyIdentity.on('logout', function() {
+    // Force back to login on logout
+    gate.classList.remove('hidden');
+    cmsWrapper.style.display = 'none';
+    checking.style.display = 'none';
+    loginBox.style.display = 'block';
+    accessMsg.style.display = 'none';
+  });
+
+  window.netlifyIdentity.on('error', function(err) {
+    denyAccess('Authentication error. Please try again.');
+  });
+
+})();
+</script>
+
 </body>
 </html>

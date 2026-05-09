@@ -1,6 +1,13 @@
 backend:
   name: git-gateway
   branch: main
+  identity_url: "/.netlify/identity"
+  gateway_url: "/.netlify/git"
+  squash_merges: true
+
+local_backend: false
+
+publish_mode: simple
 
 media_folder: "images/uploads"
 public_folder: "/images/uploads"
@@ -20,12 +27,12 @@ collections:
         name: "category"
         widget: "select"
         options:
-          - { label: "Graphic Tees",      value: "Graphic Tees" }
-          - { label: "Plain & Solid",     value: "Plain & Solid" }
-          - { label: "Polo T-Shirts",     value: "Polo T-Shirts" }
-          - { label: "Oversized Fits",    value: "Oversized Fits" }
-          - { label: "Printed Collection",value: "Printed Collection" }
-          - { label: "Limited Edition",   value: "Limited Edition" }
+          - { label: "Graphic Tees",       value: "Graphic Tees" }
+          - { label: "Plain & Solid",      value: "Plain & Solid" }
+          - { label: "Polo T-Shirts",      value: "Polo T-Shirts" }
+          - { label: "Oversized Fits",     value: "Oversized Fits" }
+          - { label: "Printed Collection", value: "Printed Collection" }
+          - { label: "Limited Edition",    value: "Limited Edition" }
       - label: "Sizes Available"
         name: "sizes"
         widget: "select"
@@ -35,7 +42,7 @@ collections:
       - label: "Colors Available"
         name: "colors"
         widget: "list"
-        hint: "Enter color names separated by adding items, e.g. White, Black, Navy"
+        hint: "Enter color names, e.g. White, Black, Navy"
         field: { label: "Color", name: "color", widget: "string" }
       - label: "Badge"
         name: "badge"
@@ -53,20 +60,19 @@ collections:
         name: "bgColor"
         widget: "select"
         options:
-          - { label: "Dark Charcoal",  value: "#1A1A1A" }
-          - { label: "Warm Ivory",     value: "#F5F0E8" }
-          - { label: "Navy Blue",      value: "#1B2A4A" }
-          - { label: "Forest Green",   value: "#2D4A3E" }
-          - { label: "Terracotta",     value: "#C4856A" }
-          - { label: "Dusty Rose",     value: "#D4A5A5" }
-          - { label: "Slate Blue",     value: "#3D5A80" }
-          - { label: "Warm Tan",       value: "#C9A97A" }
+          - { label: "Dark Charcoal", value: "#1A1A1A" }
+          - { label: "Warm Ivory",    value: "#F5F0E8" }
+          - { label: "Navy Blue",     value: "#1B2A4A" }
+          - { label: "Forest Green",  value: "#2D4A3E" }
+          - { label: "Terracotta",    value: "#C4856A" }
+          - { label: "Dusty Rose",    value: "#D4A5A5" }
+          - { label: "Slate Blue",    value: "#3D5A80" }
+          - { label: "Warm Tan",      value: "#C9A97A" }
         default: "#1A1A1A"
       - label: "Featured (shows as large card)"
         name: "featured"
         widget: "boolean"
         default: false
-        hint: "Only one product should be featured at a time"
       - label: "In Stock"
         name: "inStock"
         widget: "boolean"
@@ -79,7 +85,6 @@ collections:
         name: "description"
         widget: "text"
         required: false
-        hint: "Optional: 1-2 lines shown on hover or product detail"
 
   - name: "settings"
     label: "Site Settings"
@@ -88,14 +93,11 @@ collections:
         name: "general"
         file: "admin/site-settings.json"
         fields:
-          - { label: "Phone Number",   name: "phone",    widget: "string" }
-          - { label: "Email Address",  name: "email",    widget: "string" }
-          - { label: "Tagline",        name: "tagline",  widget: "string" }
-          - { label: "Hero Subtitle",  name: "heroSub",  widget: "text" }
-          - { label: "Years Experience", name: "yearsExp", widget: "string" }
-          - { label: "Happy Customers",  name: "customers", widget: "string" }
-          - { label: "Designs Count",    name: "designs",   widget: "string" }
-          - label: "Announcement Bar Text"
-            name: "announcement"
-            widget: "string"
-            hint: "Text shown in the gold marquee bar"
+          - { label: "Phone Number",        name: "phone",        widget: "string" }
+          - { label: "Email Address",       name: "email",        widget: "string" }
+          - { label: "Tagline",             name: "tagline",      widget: "string" }
+          - { label: "Hero Subtitle",       name: "heroSub",      widget: "text" }
+          - { label: "Years Experience",    name: "yearsExp",     widget: "string" }
+          - { label: "Happy Customers",     name: "customers",    widget: "string" }
+          - { label: "Designs Count",       name: "designs",      widget: "string" }
+          - { label: "Announcement Bar",    name: "announcement", widget: "string" }
