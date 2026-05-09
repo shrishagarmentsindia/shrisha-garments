@@ -7,6 +7,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Josefin+Sans:wght@100;200;300;400&display=swap" rel="stylesheet"/>
 <!-- js-yaml for parsing product .md files -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+<!-- Netlify Identity Widget — handles invite/password-reset tokens -->
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 
 <style>
 :root{
@@ -633,6 +635,25 @@ attachCursorListeners();
   document.getElementById('product-count').textContent =
     `${products.length} style${products.length !== 1 ? 's' : ''}`;
 })();
+
+/* ── Netlify Identity — redirect to admin after login ── */
+if (window.netlifyIdentity) {
+  window.netlifyIdentity.on('init', user => {
+    if (!user) {
+      window.netlifyIdentity.on('login', () => {
+        document.location.href = '/admin/';
+      });
+    }
+  });
+  /* Auto-open the widget if an invite/recovery token is in the URL */
+  if (window.location.hash && (
+    window.location.hash.includes('invite_token') ||
+    window.location.hash.includes('recovery_token') ||
+    window.location.hash.includes('confirmation_token')
+  )) {
+    window.netlifyIdentity.open();
+  }
+}
 </script>
 </body>
 </html>
