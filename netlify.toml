@@ -17,13 +17,16 @@
   to = "/admin/index.html"
   status = 200
 
-# Redirect Netlify invite & recovery token links to dedicated password page
+# Netlify sends invite emails with the site root URL + hash token.
+# This redirect catches it and sends user to the password-set page.
 [[redirects]]
-  from = "/#invite_token=*"
-  to = "/set-password.html#invite_token=:splat"
-  status = 301
+  from = "/"
+  to = "/set-password.html"
+  status = 200
+  conditions = {Query = ["invite_token"]}
 
 [[redirects]]
-  from = "/#recovery_token=*"
-  to = "/set-password.html#recovery_token=:splat"
-  status = 301
+  from = "/"
+  to = "/set-password.html"
+  status = 200
+  conditions = {Query = ["recovery_token"]}
