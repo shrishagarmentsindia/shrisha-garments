@@ -15,10 +15,7 @@
       background-image:radial-gradient(ellipse at 30% 70%,rgba(201,168,76,.07) 0%,transparent 60%);
     }
     #login-wrap{width:100%;max-width:440px;}
-    .box{
-      border:1px solid rgba(201,168,76,.22);background:rgba(255,255,255,.02);
-      padding:52px 44px;text-align:center;animation:up .45s ease both;
-    }
+    .box{border:1px solid rgba(201,168,76,.22);background:rgba(255,255,255,.02);padding:52px 44px;text-align:center;animation:up .45s ease both;}
     @keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
     .logo{font-family:'Cormorant Garamond',serif;font-size:2.1rem;font-weight:300;letter-spacing:.15em;color:#FAF7F2;margin-bottom:5px;}
     .logo span{color:#C9A84C;}
@@ -26,73 +23,43 @@
     h2{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:300;color:#FAF7F2;margin-bottom:9px;}
     h2 em{font-style:italic;color:#E8D08A;}
     .desc{font-size:.64rem;color:#7A7060;line-height:2;margin-bottom:30px;}
-
     .field{margin-bottom:13px;text-align:left;}
     .field label{display:block;font-size:.52rem;letter-spacing:.2em;text-transform:uppercase;color:#C9A84C;margin-bottom:7px;}
     .field input{
-      width:100%;background:rgba(255,255,255,.05);
-      border:1px solid rgba(201,168,76,.18);
-      color:#FAF7F2;padding:13px 15px;
-      font-family:'Josefin Sans',sans-serif;font-size:.78rem;
-      outline:none;transition:border-color .3s;letter-spacing:.04em;
+      width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(201,168,76,.18);
+      color:#FAF7F2;padding:13px 15px;font-family:'Josefin Sans',sans-serif;
+      font-size:.78rem;outline:none;transition:border-color .3s;letter-spacing:.04em;
     }
     .field input:focus{border-color:#C9A84C;}
     .field input::placeholder{color:#3a3530;}
-
     .btn{
-      width:100%;background:#C9A84C;color:#111009;border:none;
-      padding:15px;cursor:pointer;margin-top:8px;
-      font-family:'Josefin Sans',sans-serif;
-      font-size:.63rem;letter-spacing:.28em;text-transform:uppercase;
-      transition:background .3s;
+      width:100%;background:#C9A84C;color:#111009;border:none;padding:15px;cursor:pointer;
+      margin-top:8px;font-family:'Josefin Sans',sans-serif;font-size:.63rem;
+      letter-spacing:.28em;text-transform:uppercase;transition:background .3s;
     }
     .btn:hover{background:#E8D08A;}
     .btn:disabled{background:#4a3e20;color:#8a7540;cursor:not-allowed;}
-
-    .msg{
-      font-size:.64rem;margin-top:14px;padding:11px 14px;
-      display:none;text-align:left;line-height:1.7;
-    }
+    .msg{font-size:.64rem;margin-top:14px;padding:11px 14px;display:none;text-align:left;line-height:1.7;}
     .msg.error{color:#e07070;background:rgba(224,112,112,.07);border:1px solid rgba(224,112,112,.15);}
     .msg.ok{color:#70c070;background:rgba(112,192,112,.07);border:1px solid rgba(112,192,112,.15);}
-    .msg.info{color:#C9A84C;background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.15);}
-
-    hr{border:none;border-top:1px solid rgba(201,168,76,.1);margin:24px 0;}
-
-    .link-btn{
-      background:none;border:none;color:#7A7060;
-      font-family:'Josefin Sans',sans-serif;
-      font-size:.58rem;letter-spacing:.1em;cursor:pointer;
-      transition:color .3s;padding:3px;
-    }
+    hr{border:none;border-top:1px solid rgba(201,168,76,.1);margin:22px 0;}
+    .link-btn{background:none;border:none;color:#7A7060;font-family:'Josefin Sans',sans-serif;font-size:.58rem;letter-spacing:.1em;cursor:pointer;transition:color .3s;padding:3px;}
     .link-btn:hover{color:#C9A84C;}
-
-    .back{
-      display:block;text-align:center;margin-top:10px;
-      font-size:.56rem;color:#4a4540;text-decoration:none;letter-spacing:.1em;
-      transition:color .3s;
-    }
+    .back{display:block;text-align:center;margin-top:10px;font-size:.56rem;color:#4a4540;text-decoration:none;letter-spacing:.1em;transition:color .3s;}
     .back:hover{color:#C9A84C;}
-
-    /* Loading bar at top */
-    #topbar{
-      position:fixed;top:0;left:0;height:2px;
-      background:linear-gradient(90deg,#C9A84C,#E8D08A);
-      width:0%;transition:width .3s;z-index:9999;display:none;
-    }
+    #topbar{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,#C9A84C,#E8D08A);width:0%;transition:width .4s;z-index:9999;display:none;}
   </style>
 </head>
 <body>
 <div id="topbar"></div>
 
 <div id="login-wrap">
+  <!-- LOGIN BOX -->
   <div class="box" id="login-box">
     <div class="logo">Shrisha<span>.</span></div>
     <span class="badge">Admin Panel · Authorised Access Only</span>
-
     <h2>Admin <em>Login</em></h2>
     <p class="desc">Sign in with your invited admin credentials to manage products and site content.</p>
-
     <div class="field">
       <label>Email Address</label>
       <input type="email" id="f-email" placeholder="admin@example.com" autocomplete="email"/>
@@ -101,228 +68,222 @@
       <label>Password</label>
       <input type="password" id="f-password" placeholder="••••••••" autocomplete="current-password"/>
     </div>
-
     <button class="btn" id="btn-login" onclick="doLogin()">Login to Admin Panel</button>
     <div class="msg" id="msg"></div>
-
     <hr/>
     <button class="link-btn" onclick="showForgot()">Forgot password? Send reset email</button>
     <a href="/" class="back">← Back to website</a>
   </div>
 
-  <!-- Forgot password box (hidden by default) -->
+  <!-- FORGOT PASSWORD BOX -->
   <div class="box" id="forgot-box" style="display:none;">
     <div class="logo">Shrisha<span>.</span></div>
     <span class="badge">Password Reset</span>
-
     <h2>Reset <em>Password</em></h2>
     <p class="desc">Enter your admin email and we'll send a reset link to your inbox.</p>
-
     <div class="field">
       <label>Email Address</label>
       <input type="email" id="r-email" placeholder="admin@example.com" autocomplete="email"/>
     </div>
-
     <button class="btn" id="btn-reset" onclick="doReset()">Send Reset Email</button>
     <div class="msg" id="rmsg"></div>
-
     <hr/>
     <button class="link-btn" onclick="showLogin()">← Back to Login</button>
   </div>
 </div>
 
-<script>
-/* ══════════════════════════════════════════════════════════
-   PURE FETCH — NO WIDGET, NO LIBRARY
-   Calls Netlify Identity REST API directly.
-   ══════════════════════════════════════════════════════════ */
+<!-- CMS container — hidden until login succeeds -->
+<div id="cms-wrap" style="display:none;position:fixed;inset:0;background:#fff;overflow:auto;"></div>
 
+<script>
 var API = window.location.origin + '/.netlify/identity';
 
-/* ── Helpers ── */
-function showMsg(id, text, type) {
-  var el = document.getElementById(id);
-  el.textContent = text;
-  el.className = 'msg ' + type;
-  el.style.display = 'block';
-}
-function clearMsg(id) {
-  var el = document.getElementById(id);
-  el.style.display = 'none';
-  el.textContent = '';
-}
-function setBtn(id, disabled, text) {
-  var el = document.getElementById(id);
-  el.disabled = disabled;
-  el.textContent = text;
-}
 function topbar(pct) {
-  var bar = document.getElementById('topbar');
-  if (pct === 0) { bar.style.display='none'; bar.style.width='0%'; return; }
-  bar.style.display = 'block';
-  bar.style.width = pct + '%';
+  var b = document.getElementById('topbar');
+  if (!pct) { b.style.display='none'; b.style.width='0%'; return; }
+  b.style.display='block'; b.style.width=pct+'%';
 }
+function showM(id, text, type) {
+  var e=document.getElementById(id); e.textContent=text;
+  e.className='msg '+type; e.style.display='block';
+}
+function clearM(id){ var e=document.getElementById(id); e.style.display='none'; }
+function setBtn(id, off, txt){ var b=document.getElementById(id); b.disabled=off; b.textContent=txt; }
 
 function showLogin() {
-  document.getElementById('login-box').style.display = 'block';
-  document.getElementById('forgot-box').style.display = 'none';
+  document.getElementById('login-box').style.display='block';
+  document.getElementById('forgot-box').style.display='none';
 }
 function showForgot() {
-  var email = document.getElementById('f-email').value;
-  document.getElementById('r-email').value = email; // pre-fill
-  document.getElementById('login-box').style.display = 'none';
-  document.getElementById('forgot-box').style.display = 'block';
+  document.getElementById('r-email').value = document.getElementById('f-email').value;
+  document.getElementById('login-box').style.display='none';
+  document.getElementById('forgot-box').style.display='block';
+}
+
+/* ── LAUNCH CMS after successful auth ── */
+function launchCMS(userData) {
+  topbar(90);
+
+  /*
+    Store token in the EXACT format Decap CMS / Netlify Identity widget expects.
+    Key: 'gotrue.user'
+    The token object must be nested under a 'token' key.
+  */
+  var storeObj = {
+    access_token:  userData.access_token,
+    refresh_token: userData.refresh_token || '',
+    expires_in:    userData.expires_in || 3600,
+    token_type:    'bearer',
+    url:           API,
+    email:         userData.email,
+    id:            userData.id || '',
+    app_metadata:  userData.app_metadata || {},
+    user_metadata: userData.user_metadata || {},
+    token: {
+      access_token:  userData.access_token,
+      refresh_token: userData.refresh_token || '',
+      expires_in:    userData.expires_in || 3600,
+      token_type:    'bearer',
+      expires_at:    new Date(Date.now() + ((userData.expires_in||3600)*1000)).toISOString()
+    }
+  };
+  localStorage.setItem('gotrue.user', JSON.stringify(storeObj));
+
+  /* Hide login, show CMS container */
+  document.getElementById('login-wrap').style.display = 'none';
+  var cmsWrap = document.getElementById('cms-wrap');
+  cmsWrap.style.display = 'block';
+
+  /* Reset body styles for CMS */
+  document.body.style.cssText = 'margin:0;padding:0;background:#fff;display:block;min-height:100vh;';
+
+  /* Dynamically inject Decap CMS into the page */
+  var script = document.createElement('script');
+  script.src = 'https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js';
+  script.onload = function() { topbar(0); };
+  script.onerror = function() {
+    topbar(0);
+    cmsWrap.innerHTML = '<div style="padding:48px;font-family:sans-serif;color:#333;max-width:500px;margin:auto;">' +
+      '<h2 style="margin-bottom:12px;">⚠️ CMS Failed to Load</h2>' +
+      '<p style="line-height:1.8;color:#666;">The admin CMS script could not be loaded. This is usually a temporary network issue.</p>' +
+      '<br/><a href="/admin/" style="color:#C9A84C;">Try Again</a></div>';
+  };
+  document.head.appendChild(script);
+
+  setTimeout(function(){ topbar(100); }, 300);
 }
 
 /* ── LOGIN ── */
 async function doLogin() {
   var email    = document.getElementById('f-email').value.trim();
   var password = document.getElementById('f-password').value;
-  clearMsg('msg');
+  clearM('msg');
 
-  if (!email)    { showMsg('msg','Please enter your email address.','error'); return; }
-  if (!password) { showMsg('msg','Please enter your password.','error'); return; }
+  if (!email)    { showM('msg','Please enter your email address.','error'); return; }
+  if (!password) { showM('msg','Please enter your password.','error'); return; }
 
-  setBtn('btn-login', true, 'Logging in…');
-  topbar(40);
+  setBtn('btn-login', true, 'Verifying…');
+  topbar(30);
 
   try {
-    /* Step 1: Get access token */
+    /* Get OAuth token */
     var tokenRes = await fetch(API + '/token', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({
-        grant_type: 'password',
-        username:   email,
-        password:   password
-      })
+      body: new URLSearchParams({ grant_type:'password', username:email, password:password })
     });
 
-    topbar(70);
+    topbar(55);
     var tokenData = await tokenRes.json();
 
     if (!tokenRes.ok) {
       topbar(0);
       setBtn('btn-login', false, 'Login to Admin Panel');
-      var errMsg = tokenData.error_description || tokenData.msg || tokenData.error || 'Login failed.';
-      if (errMsg.toLowerCase().includes('invalid') || errMsg.toLowerCase().includes('no user')) {
-        errMsg = 'Incorrect email or password. Please try again.';
+      var e = tokenData.error_description || tokenData.msg || tokenData.error || 'Login failed.';
+      if (e.toLowerCase().includes('invalid') || e.toLowerCase().includes('no user found')) {
+        e = 'Incorrect email or password. Please try again.';
       }
-      showMsg('msg', '❌ ' + errMsg, 'error');
+      showM('msg', '❌ ' + e, 'error');
       return;
     }
 
-    var accessToken = tokenData.access_token;
+    topbar(75);
 
-    /* Step 2: Store token so Decap CMS can read it */
-    var userStore = {
-      access_token:  accessToken,
-      refresh_token: tokenData.refresh_token || '',
-      expires_at:    Date.now() + ((tokenData.expires_in || 3600) * 1000),
-      token_type:    'bearer',
-      email:         email
-    };
-    /* Netlify Identity stores user in localStorage under this key */
-    localStorage.setItem('gotrue.user', JSON.stringify({
-      access_token:  accessToken,
-      refresh_token: tokenData.refresh_token || '',
-      expires_in:    tokenData.expires_in || 3600,
-      token_type:    'bearer',
-      url:           API
-    }));
+    /* Fetch full user profile to get id, metadata etc */
+    var userRes = await fetch(API + '/user', {
+      headers: { 'Authorization': 'Bearer ' + tokenData.access_token }
+    });
 
-    topbar(90);
-    showMsg('msg', '✅ Login successful! Loading admin panel…', 'ok');
+    var userData = userRes.ok ? await userRes.json() : {};
+    userData.access_token  = tokenData.access_token;
+    userData.refresh_token = tokenData.refresh_token || '';
+    userData.expires_in    = tokenData.expires_in || 3600;
+    userData.email         = userData.email || email;
 
-    /* Step 3: Load Decap CMS dynamically and hide login */
-    setTimeout(function() {
-      topbar(100);
-      document.getElementById('login-wrap').style.display = 'none';
-      document.body.style.background = '#fff';
-      document.body.style.display = 'block';
-      document.body.style.alignItems = 'unset';
-      document.body.style.justifyContent = 'unset';
-      document.body.style.padding = '0';
+    showM('msg', '✅ Authenticated! Opening admin panel…', 'ok');
+    setTimeout(function(){ launchCMS(userData); }, 600);
 
-      /* Load the CMS script — it will read the token from localStorage */
-      var s = document.createElement('script');
-      s.src = 'https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js';
-      s.onerror = function() {
-        document.body.innerHTML = '<div style="padding:40px;font-family:sans-serif;color:#333;">' +
-          '<h2>CMS failed to load</h2><p>Check your internet connection and <a href="/admin/">try again</a>.</p></div>';
-      };
-      document.head.appendChild(s);
-      setTimeout(function(){ topbar(0); }, 500);
-    }, 800);
-
-  } catch(e) {
+  } catch(err) {
     topbar(0);
     setBtn('btn-login', false, 'Login to Admin Panel');
-    showMsg('msg', '❌ Network error: ' + (e.message || 'Check your internet connection.'), 'error');
+    showM('msg', '❌ Network error: ' + (err.message||'Check your connection.'), 'error');
   }
 }
 
 /* ── FORGOT PASSWORD ── */
 async function doReset() {
   var email = document.getElementById('r-email').value.trim();
-  clearMsg('rmsg');
-
-  if (!email) { showMsg('rmsg','Enter your email address.','error'); return; }
-
+  clearM('rmsg');
+  if (!email) { showM('rmsg','Enter your email address.','error'); return; }
   setBtn('btn-reset', true, 'Sending…');
-
   try {
     var res = await fetch(API + '/recover', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: email })
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ email:email })
     });
-
     setBtn('btn-reset', false, 'Send Reset Email');
-
-    if (res.ok || res.status === 200 || res.status === 204) {
-      showMsg('rmsg', '✅ Reset email sent to ' + email + '. Check your inbox (and spam folder).', 'ok');
+    if (res.ok || res.status===200 || res.status===204) {
+      showM('rmsg', '✅ Reset email sent to '+email+'. Check your inbox and spam folder.', 'ok');
     } else {
-      var d = await res.json().catch(function(){ return {}; });
-      showMsg('rmsg', '❌ ' + (d.msg || 'Could not send reset email.'), 'error');
+      var d = await res.json().catch(function(){return{};});
+      showM('rmsg', '❌ '+(d.msg||'Could not send reset email.'), 'error');
     }
   } catch(e) {
     setBtn('btn-reset', false, 'Send Reset Email');
-    showMsg('rmsg', '❌ Network error. Try again.', 'error');
+    showM('rmsg', '❌ Network error. Try again.', 'error');
   }
 }
 
-/* ── Enter key support ── */
+/* ── Enter key ── */
 document.addEventListener('keydown', function(e) {
   if (e.key !== 'Enter') return;
-  var loginVisible = document.getElementById('login-box').style.display !== 'none';
-  if (loginVisible) doLogin(); else doReset();
+  if (document.getElementById('login-box').style.display !== 'none') doLogin();
+  else doReset();
 });
 
-/* ── Check existing session ── */
-(function checkSession() {
+/* ── Check existing valid session on page load ── */
+(function() {
   try {
-    var stored = localStorage.getItem('gotrue.user');
-    if (!stored) return;
-    var u = JSON.parse(stored);
-    if (!u || !u.access_token) return;
+    var raw = localStorage.getItem('gotrue.user');
+    if (!raw) return;
+    var u = JSON.parse(raw);
+    var token = (u.token && u.token.access_token) || u.access_token;
+    if (!token) return;
 
-    /* Verify token is still valid with a quick API call */
-    fetch(API + '/user', {
-      headers: { 'Authorization': 'Bearer ' + u.access_token }
-    }).then(function(r) {
-      if (r.ok) {
-        /* Token valid — skip login, load CMS directly */
-        document.getElementById('login-wrap').style.display = 'none';
-        document.body.style.cssText = 'background:#fff;display:block;padding:0;margin:0;';
-        var s = document.createElement('script');
-        s.src = 'https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js';
-        document.head.appendChild(s);
-      } else {
-        /* Token expired */
-        localStorage.removeItem('gotrue.user');
-      }
-    }).catch(function(){});
+    /* Quick verify */
+    fetch(API + '/user', { headers:{ 'Authorization':'Bearer '+token } })
+      .then(function(r) {
+        if (r.ok) {
+          return r.json().then(function(userData) {
+            userData.access_token  = token;
+            userData.refresh_token = u.refresh_token || '';
+            userData.expires_in    = u.expires_in || 3600;
+            launchCMS(userData);
+          });
+        } else {
+          localStorage.removeItem('gotrue.user');
+        }
+      }).catch(function(){});
   } catch(e) {}
 })();
 </script>
