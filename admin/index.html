@@ -6,205 +6,325 @@
   <title>Shrisha Garments — Admin</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👗</text></svg>"/>
   <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@200;300;400&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap" rel="stylesheet"/>
-
-  <!-- Netlify Identity widget — must load FIRST before decap cms -->
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-
   <style>
     *{margin:0;padding:0;box-sizing:border-box;}
-
-    /* Hide everything by default — gate controls visibility */
-    body{background:#111009;font-family:'Josefin Sans',sans-serif;min-height:100vh;overflow:hidden;}
-
-    /* ── AUTH GATE ── */
-    #gate{
-      position:fixed;inset:0;z-index:99999;background:#111009;
-      display:flex;align-items:center;justify-content:center;
+    body{
+      background:#111009;font-family:'Josefin Sans',sans-serif;
+      min-height:100vh;display:flex;align-items:center;justify-content:center;
       padding:20px;
       background-image:radial-gradient(ellipse at 30% 70%,rgba(201,168,76,.07) 0%,transparent 60%);
     }
-    .box{border:1px solid rgba(201,168,76,.22);background:rgba(255,255,255,.02);padding:52px 44px;max-width:440px;width:100%;text-align:center;animation:fadeUp .5s ease both;}
-    @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+    #login-wrap{width:100%;max-width:440px;}
+    .box{
+      border:1px solid rgba(201,168,76,.22);background:rgba(255,255,255,.02);
+      padding:52px 44px;text-align:center;animation:up .45s ease both;
+    }
+    @keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
     .logo{font-family:'Cormorant Garamond',serif;font-size:2.1rem;font-weight:300;letter-spacing:.15em;color:#FAF7F2;margin-bottom:5px;}
     .logo span{color:#C9A84C;}
-    .badge{font-size:.52rem;letter-spacing:.28em;text-transform:uppercase;color:#C9A84C;display:block;margin-bottom:40px;}
-    .gate-title{font-family:'Cormorant Garamond',serif;font-size:1.55rem;font-weight:300;color:#FAF7F2;margin-bottom:10px;}
-    .gate-title em{font-style:italic;color:#E8D08A;}
-    .gate-desc{font-size:.66rem;color:#7A7060;line-height:2;letter-spacing:.06em;margin-bottom:32px;}
+    .badge{font-size:.52rem;letter-spacing:.28em;text-transform:uppercase;color:#C9A84C;display:block;margin-bottom:38px;}
+    h2{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:300;color:#FAF7F2;margin-bottom:9px;}
+    h2 em{font-style:italic;color:#E8D08A;}
+    .desc{font-size:.64rem;color:#7A7060;line-height:2;margin-bottom:30px;}
 
-    .field{margin-bottom:14px;text-align:left;}
-    .field label{display:block;font-size:.54rem;letter-spacing:.2em;text-transform:uppercase;color:#C9A84C;margin-bottom:7px;}
+    .field{margin-bottom:13px;text-align:left;}
+    .field label{display:block;font-size:.52rem;letter-spacing:.2em;text-transform:uppercase;color:#C9A84C;margin-bottom:7px;}
     .field input{
-      width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(201,168,76,.18);
+      width:100%;background:rgba(255,255,255,.05);
+      border:1px solid rgba(201,168,76,.18);
       color:#FAF7F2;padding:13px 15px;
-      font-family:'Josefin Sans',sans-serif;font-size:.76rem;letter-spacing:.05em;
-      outline:none;transition:border-color .3s;
+      font-family:'Josefin Sans',sans-serif;font-size:.78rem;
+      outline:none;transition:border-color .3s;letter-spacing:.04em;
     }
     .field input:focus{border-color:#C9A84C;}
     .field input::placeholder{color:#3a3530;}
 
-    .btn-primary{
-      width:100%;background:#C9A84C;color:#111009;border:none;padding:15px;
-      cursor:pointer;font-family:'Josefin Sans',sans-serif;
+    .btn{
+      width:100%;background:#C9A84C;color:#111009;border:none;
+      padding:15px;cursor:pointer;margin-top:8px;
+      font-family:'Josefin Sans',sans-serif;
       font-size:.63rem;letter-spacing:.28em;text-transform:uppercase;
-      transition:background .3s;margin-top:6px;
+      transition:background .3s;
     }
-    .btn-primary:hover{background:#E8D08A;}
-    .btn-primary:disabled{background:#5a4e30;cursor:not-allowed;}
+    .btn:hover{background:#E8D08A;}
+    .btn:disabled{background:#4a3e20;color:#8a7540;cursor:not-allowed;}
 
-    .forgot-btn{
-      background:none;border:none;color:#7A7060;font-family:'Josefin Sans',sans-serif;
-      font-size:.58rem;letter-spacing:.12em;cursor:pointer;margin-top:14px;
-      display:block;width:100%;text-align:center;transition:color .3s;padding:4px;
+    .msg{
+      font-size:.64rem;margin-top:14px;padding:11px 14px;
+      display:none;text-align:left;line-height:1.7;
     }
-    .forgot-btn:hover{color:#C9A84C;}
+    .msg.error{color:#e07070;background:rgba(224,112,112,.07);border:1px solid rgba(224,112,112,.15);}
+    .msg.ok{color:#70c070;background:rgba(112,192,112,.07);border:1px solid rgba(112,192,112,.15);}
+    .msg.info{color:#C9A84C;background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.15);}
 
-    .divider{border:none;border-top:1px solid rgba(201,168,76,.12);margin:24px 0;}
-    .back-link{font-size:.58rem;color:#7A7060;letter-spacing:.1em;text-decoration:none;transition:color .3s;}
-    .back-link:hover{color:#C9A84C;}
+    hr{border:none;border-top:1px solid rgba(201,168,76,.1);margin:24px 0;}
 
-    .msg{font-size:.63rem;letter-spacing:.07em;margin-top:14px;padding:10px 13px;display:none;text-align:left;}
-    .msg.error{color:#e07070;background:rgba(224,112,112,.07);border:1px solid rgba(224,112,112,.18);}
-    .msg.ok{color:#70c070;background:rgba(112,192,112,.07);border:1px solid rgba(112,192,112,.18);}
-    .msg.show{display:block;}
+    .link-btn{
+      background:none;border:none;color:#7A7060;
+      font-family:'Josefin Sans',sans-serif;
+      font-size:.58rem;letter-spacing:.1em;cursor:pointer;
+      transition:color .3s;padding:3px;
+    }
+    .link-btn:hover{color:#C9A84C;}
 
-    .spinner{display:none;width:20px;height:20px;border:2px solid rgba(201,168,76,.15);border-top-color:#C9A84C;border-radius:50%;animation:spin .7s linear infinite;margin:14px auto 0;}
-    @keyframes spin{to{transform:rotate(360deg)}}
+    .back{
+      display:block;text-align:center;margin-top:10px;
+      font-size:.56rem;color:#4a4540;text-decoration:none;letter-spacing:.1em;
+      transition:color .3s;
+    }
+    .back:hover{color:#C9A84C;}
 
-    /* ── CMS AREA — hidden until logged in ── */
-    #cms-area{display:none;position:fixed;inset:0;overflow:auto;background:#fff;}
+    /* Loading bar at top */
+    #topbar{
+      position:fixed;top:0;left:0;height:2px;
+      background:linear-gradient(90deg,#C9A84C,#E8D08A);
+      width:0%;transition:width .3s;z-index:9999;display:none;
+    }
   </style>
 </head>
 <body>
+<div id="topbar"></div>
 
-<!-- GATE: shown until authenticated -->
-<div id="gate">
-  <div class="box">
+<div id="login-wrap">
+  <div class="box" id="login-box">
     <div class="logo">Shrisha<span>.</span></div>
     <span class="badge">Admin Panel · Authorised Access Only</span>
 
-    <div class="gate-title">Admin <em>Login</em></div>
-    <p class="gate-desc">Enter your invited admin email and password to manage products and site content.</p>
+    <h2>Admin <em>Login</em></h2>
+    <p class="desc">Sign in with your invited admin credentials to manage products and site content.</p>
 
     <div class="field">
       <label>Email Address</label>
-      <input type="email" id="email" placeholder="admin@example.com" autocomplete="email"/>
+      <input type="email" id="f-email" placeholder="admin@example.com" autocomplete="email"/>
     </div>
     <div class="field">
       <label>Password</label>
-      <input type="password" id="password" placeholder="••••••••" autocomplete="current-password"/>
+      <input type="password" id="f-password" placeholder="••••••••" autocomplete="current-password"/>
     </div>
 
-    <button class="btn-primary" id="btn-login" onclick="doLogin()">Login to Admin Panel</button>
-    <div class="spinner" id="spinner"></div>
+    <button class="btn" id="btn-login" onclick="doLogin()">Login to Admin Panel</button>
     <div class="msg" id="msg"></div>
 
-    <button class="forgot-btn" onclick="showForgot()">Forgot password?</button>
+    <hr/>
+    <button class="link-btn" onclick="showForgot()">Forgot password? Send reset email</button>
+    <a href="/" class="back">← Back to website</a>
+  </div>
 
-    <hr class="divider"/>
-    <a href="/" class="back-link">← Back to Shrisha Garments website</a>
+  <!-- Forgot password box (hidden by default) -->
+  <div class="box" id="forgot-box" style="display:none;">
+    <div class="logo">Shrisha<span>.</span></div>
+    <span class="badge">Password Reset</span>
+
+    <h2>Reset <em>Password</em></h2>
+    <p class="desc">Enter your admin email and we'll send a reset link to your inbox.</p>
+
+    <div class="field">
+      <label>Email Address</label>
+      <input type="email" id="r-email" placeholder="admin@example.com" autocomplete="email"/>
+    </div>
+
+    <button class="btn" id="btn-reset" onclick="doReset()">Send Reset Email</button>
+    <div class="msg" id="rmsg"></div>
+
+    <hr/>
+    <button class="link-btn" onclick="showLogin()">← Back to Login</button>
   </div>
 </div>
 
-<!-- CMS renders here after login -->
-<div id="cms-area"></div>
-
 <script>
-/* ══════════════════════════════════════════════════════
-   APPROACH: Use netlifyIdentity JS API directly.
-   We call netlifyIdentity.login() with credentials —
-   this uses the Identity service properly without
-   needing the popup widget UI at all.
-   ══════════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════
+   PURE FETCH — NO WIDGET, NO LIBRARY
+   Calls Netlify Identity REST API directly.
+   ══════════════════════════════════════════════════════════ */
 
-var ni = window.netlifyIdentity;
+var API = window.location.origin + '/.netlify/identity';
 
-function msg(text, type) {
-  var el = document.getElementById('msg');
+/* ── Helpers ── */
+function showMsg(id, text, type) {
+  var el = document.getElementById(id);
   el.textContent = text;
-  el.className = 'msg ' + type + ' show';
+  el.className = 'msg ' + type;
+  el.style.display = 'block';
 }
-function clearMsg() {
-  var el = document.getElementById('msg');
-  el.className = 'msg';
+function clearMsg(id) {
+  var el = document.getElementById(id);
+  el.style.display = 'none';
+  el.textContent = '';
 }
-function setLoading(on) {
-  document.getElementById('btn-login').disabled = on;
-  document.getElementById('spinner').style.display = on ? 'block' : 'none';
+function setBtn(id, disabled, text) {
+  var el = document.getElementById(id);
+  el.disabled = disabled;
+  el.textContent = text;
+}
+function topbar(pct) {
+  var bar = document.getElementById('topbar');
+  if (pct === 0) { bar.style.display='none'; bar.style.width='0%'; return; }
+  bar.style.display = 'block';
+  bar.style.width = pct + '%';
 }
 
+function showLogin() {
+  document.getElementById('login-box').style.display = 'block';
+  document.getElementById('forgot-box').style.display = 'none';
+}
 function showForgot() {
-  var email = document.getElementById('email').value.trim();
-  if (!email) { msg('Enter your email address above first.', 'error'); return; }
-  setLoading(true);
-  clearMsg();
-  ni.requestPasswordRecovery(email)
-    .then(function() {
-      setLoading(false);
-      msg('Password reset email sent to ' + email + '. Check your inbox.', 'ok');
-    })
-    .catch(function(e) {
-      setLoading(false);
-      msg('Could not send reset email. Make sure this email has been invited.', 'error');
+  var email = document.getElementById('f-email').value;
+  document.getElementById('r-email').value = email; // pre-fill
+  document.getElementById('login-box').style.display = 'none';
+  document.getElementById('forgot-box').style.display = 'block';
+}
+
+/* ── LOGIN ── */
+async function doLogin() {
+  var email    = document.getElementById('f-email').value.trim();
+  var password = document.getElementById('f-password').value;
+  clearMsg('msg');
+
+  if (!email)    { showMsg('msg','Please enter your email address.','error'); return; }
+  if (!password) { showMsg('msg','Please enter your password.','error'); return; }
+
+  setBtn('btn-login', true, 'Logging in…');
+  topbar(40);
+
+  try {
+    /* Step 1: Get access token */
+    var tokenRes = await fetch(API + '/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        grant_type: 'password',
+        username:   email,
+        password:   password
+      })
     });
-}
 
-function grantAccess() {
-  document.getElementById('gate').style.display = 'none';
-  var area = document.getElementById('cms-area');
-  area.style.display = 'block';
-  // Dynamically load Decap CMS now
-  var s = document.createElement('script');
-  s.src = 'https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js';
-  document.head.appendChild(s);
-}
+    topbar(70);
+    var tokenData = await tokenRes.json();
 
-function doLogin() {
-  var email    = document.getElementById('email').value.trim();
-  var password = document.getElementById('password').value;
-  if (!email)    { msg('Please enter your email address.', 'error'); return; }
-  if (!password) { msg('Please enter your password.', 'error'); return; }
-  clearMsg();
-  setLoading(true);
-
-  ni.login(email, password, true)
-    .then(function(user) {
-      setLoading(false);
-      if (user) {
-        grantAccess();
-      } else {
-        msg('Login failed. Please check your credentials.', 'error');
+    if (!tokenRes.ok) {
+      topbar(0);
+      setBtn('btn-login', false, 'Login to Admin Panel');
+      var errMsg = tokenData.error_description || tokenData.msg || tokenData.error || 'Login failed.';
+      if (errMsg.toLowerCase().includes('invalid') || errMsg.toLowerCase().includes('no user')) {
+        errMsg = 'Incorrect email or password. Please try again.';
       }
-    })
-    .catch(function(e) {
-      setLoading(false);
-      var errText = (e && e.json && e.json.error_description)
-        ? e.json.error_description
-        : (e && e.message ? e.message : 'Invalid email or password.');
-      msg('Login failed: ' + errText, 'error');
-    });
+      showMsg('msg', '❌ ' + errMsg, 'error');
+      return;
+    }
+
+    var accessToken = tokenData.access_token;
+
+    /* Step 2: Store token so Decap CMS can read it */
+    var userStore = {
+      access_token:  accessToken,
+      refresh_token: tokenData.refresh_token || '',
+      expires_at:    Date.now() + ((tokenData.expires_in || 3600) * 1000),
+      token_type:    'bearer',
+      email:         email
+    };
+    /* Netlify Identity stores user in localStorage under this key */
+    localStorage.setItem('gotrue.user', JSON.stringify({
+      access_token:  accessToken,
+      refresh_token: tokenData.refresh_token || '',
+      expires_in:    tokenData.expires_in || 3600,
+      token_type:    'bearer',
+      url:           API
+    }));
+
+    topbar(90);
+    showMsg('msg', '✅ Login successful! Loading admin panel…', 'ok');
+
+    /* Step 3: Load Decap CMS dynamically and hide login */
+    setTimeout(function() {
+      topbar(100);
+      document.getElementById('login-wrap').style.display = 'none';
+      document.body.style.background = '#fff';
+      document.body.style.display = 'block';
+      document.body.style.alignItems = 'unset';
+      document.body.style.justifyContent = 'unset';
+      document.body.style.padding = '0';
+
+      /* Load the CMS script — it will read the token from localStorage */
+      var s = document.createElement('script');
+      s.src = 'https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js';
+      s.onerror = function() {
+        document.body.innerHTML = '<div style="padding:40px;font-family:sans-serif;color:#333;">' +
+          '<h2>CMS failed to load</h2><p>Check your internet connection and <a href="/admin/">try again</a>.</p></div>';
+      };
+      document.head.appendChild(s);
+      setTimeout(function(){ topbar(0); }, 500);
+    }, 800);
+
+  } catch(e) {
+    topbar(0);
+    setBtn('btn-login', false, 'Login to Admin Panel');
+    showMsg('msg', '❌ Network error: ' + (e.message || 'Check your internet connection.'), 'error');
+  }
 }
 
-// Allow Enter key to submit
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') doLogin();
-});
+/* ── FORGOT PASSWORD ── */
+async function doReset() {
+  var email = document.getElementById('r-email').value.trim();
+  clearMsg('rmsg');
 
-// Check for existing valid session on page load
-ni.on('init', function(user) {
-  if (user) {
-    // Already logged in — go straight to CMS
-    grantAccess();
+  if (!email) { showMsg('rmsg','Enter your email address.','error'); return; }
+
+  setBtn('btn-reset', true, 'Sending…');
+
+  try {
+    var res = await fetch(API + '/recover', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email })
+    });
+
+    setBtn('btn-reset', false, 'Send Reset Email');
+
+    if (res.ok || res.status === 200 || res.status === 204) {
+      showMsg('rmsg', '✅ Reset email sent to ' + email + '. Check your inbox (and spam folder).', 'ok');
+    } else {
+      var d = await res.json().catch(function(){ return {}; });
+      showMsg('rmsg', '❌ ' + (d.msg || 'Could not send reset email.'), 'error');
+    }
+  } catch(e) {
+    setBtn('btn-reset', false, 'Send Reset Email');
+    showMsg('rmsg', '❌ Network error. Try again.', 'error');
   }
-  // else stay on login screen
+}
+
+/* ── Enter key support ── */
+document.addEventListener('keydown', function(e) {
+  if (e.key !== 'Enter') return;
+  var loginVisible = document.getElementById('login-box').style.display !== 'none';
+  if (loginVisible) doLogin(); else doReset();
 });
 
-ni.on('logout', function() {
-  // Re-show gate on logout
-  document.getElementById('gate').style.display = 'flex';
-  document.getElementById('cms-area').style.display = 'none';
-});
+/* ── Check existing session ── */
+(function checkSession() {
+  try {
+    var stored = localStorage.getItem('gotrue.user');
+    if (!stored) return;
+    var u = JSON.parse(stored);
+    if (!u || !u.access_token) return;
+
+    /* Verify token is still valid with a quick API call */
+    fetch(API + '/user', {
+      headers: { 'Authorization': 'Bearer ' + u.access_token }
+    }).then(function(r) {
+      if (r.ok) {
+        /* Token valid — skip login, load CMS directly */
+        document.getElementById('login-wrap').style.display = 'none';
+        document.body.style.cssText = 'background:#fff;display:block;padding:0;margin:0;';
+        var s = document.createElement('script');
+        s.src = 'https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js';
+        document.head.appendChild(s);
+      } else {
+        /* Token expired */
+        localStorage.removeItem('gotrue.user');
+      }
+    }).catch(function(){});
+  } catch(e) {}
+})();
 </script>
-
 </body>
 </html>
